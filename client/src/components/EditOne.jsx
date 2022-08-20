@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {useParams, useNavigate} from 'react-router-dom'
 import axios from 'axios'
+import Form from './Form'
 
 const EditOne = props => {
 
@@ -8,9 +9,10 @@ const EditOne = props => {
 
     const {id} = useParams()
     const [product, setProduct] = useState({})
-    const [title, setTitle] = useState('');
-    const [price, setPrice] = useState(0);
-    const [description, setDescription] = useState('');
+    // const [title, setTitle] = useState('');
+    // const [price, setPrice] = useState(0);
+    // const [description, setDescription] = useState('');
+    const [loaded, setLoaded] = useState(false)
 
     useEffect( ()=> {
         axios.get(`http://localhost:8000/api/products/${id}`)
@@ -18,15 +20,23 @@ const EditOne = props => {
                 console.log(res.data)
                 setProduct(res.data)
 
-                setTitle(res.data.title)
-                setPrice(res.data.price)
-                setDescription(res.data.description)
+                // setTitle(res.data.title)
+                // setPrice(res.data.price)
+                // setDescription(res.data.description)
+                setLoaded(true)
             })
             .catch( err => console.log(err))
+
+
     },[])
 
-    const editHandler = ()=>{
-        axios.put(`http://localhost:8000/api/products/${id}`, {title, price, description})
+    const updateProduct = (title, price, description)=>{
+        axios.put(`http://localhost:8000/api/products/${id}`, 
+            {
+                "title":title, 
+                "price":price, 
+                "description": description
+            })
             .then( res => {
                 console.log(`Edited: ${res.data}`)
             })
@@ -39,7 +49,18 @@ const EditOne = props => {
     return(
         <div>
             <h2>Edit {product.title}</h2>
-            <form onSubmit={ (e) => editHandler(e)}>
+
+            {
+                loaded &&
+                <Form 
+                    initTitle = {product.title}
+                    initPrice = {product.price}
+                    initDescription = {product.description}
+                    onSubmit = {updateProduct}
+                />
+            }
+
+            {/* <form onSubmit={ (e) => updateProduct(e)}>
 
                 <div id="title">
                     <label>Title:</label>
@@ -58,7 +79,7 @@ const EditOne = props => {
 
                 <button>Edit</button>
 
-            </form>
+            </form> */}
         </div>
     )
 }

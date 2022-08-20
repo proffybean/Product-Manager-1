@@ -1,7 +1,8 @@
 const mongoose = require("mongoose")
 const database = 'Acme'
+const localhost = '127.0.0.1'
 
-mongoose.connect("mongodb://localhost/" + database, {
+mongoose.connect(`mongodb://${localhost}/${database}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })

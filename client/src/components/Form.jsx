@@ -3,27 +3,36 @@ import axios from 'axios'
 
 const Form = props => {
 
-    const {productList, setProductList } = props
-    const [title, setTitle] = useState('');
-    const [price, setPrice] = useState(0);
-    const [description, setDescription] = useState('');
+    const { initTitle, initPrice, initDescription, onSubmit } = props
+    const [title, setTitle] = useState(initTitle);
+    const [price, setPrice] = useState(initPrice);
+    const [description, setDescription] = useState(initDescription);
 
-    const submitHandler = (e) =>{
+    // const submitHandler = (e) =>{
+    //     e.preventDefault()
+    //     axios.post('http://localhost:8000/api/products', 
+    //         {title, price, description})
+    //         .then( res => {
+    //             console.log(res.data)
+    //              // add to lifted state, productlist
+    //              setProductList([...productList, {_id:res.data._id, title, price, description}])
+    //         })
+    //         .catch( error => {
+    //             console.log(error)
+    //         })
+
+    //         setTitle('')
+    //         setPrice(0)
+    //         setDescription('')
+    // }
+
+    const submitHandler = (e) => {
         e.preventDefault()
-        axios.post('http://localhost:8000/api/products', 
-            {title, price, description})
-            .then( res => {
-                console.log(res.data)
-                 // add to lifted state, productlist
-                 setProductList([...productList, {_id:res.data._id, title, price, description}])
-            })
-            .catch( error => {
-                console.log(error)
-            })
+        onSubmit(title, price, description)
 
-            setTitle('')
-            setPrice(0)
-            setDescription('')
+        setTitle('')
+        setPrice(0)
+        setDescription('')
     }
 
     return (
